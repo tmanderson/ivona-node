@@ -59,11 +59,11 @@ function merge(source, reference, deep) {
 	for(i in source) output[i] = source[i];
 
 	for(i in reference) {
-		if(!output[i]) {
-			output[i] = reference[i];
+		if(typeof reference[i] === 'object' && deep === true) {
+			output[i] = merge(output[i], reference[i], deep);
 		}
-		else if(typeof output[i] !== 'string' && deep === true) {
-			output[i] = merge(output[i], reference[i]);
+		else {
+			output[i] = reference[i];
 		}
 	}
 
