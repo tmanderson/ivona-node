@@ -41,5 +41,5 @@ No current documentation, as the entire extent of the API can be viewed below.
                 gender: 'Female'
             }
         }
-    });
+    }).pipe(fs.createWriteStream('text.mp3'));
 ```

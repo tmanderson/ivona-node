@@ -10,6 +10,7 @@ ivona.listVoices().on('complete', function(voices) {
     console.log(voices);
 });
 
-// output to the file example/test.mp3
+//  [string] text - the text to be spoken
+//  [object] config (optional) - override Ivona request via 'body' value
 ivona.createVoice('This is the text that will be spoken.')
     .pipe(fs.createWriteStream('example/test.mp3'));
