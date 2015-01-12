@@ -1,8 +1,8 @@
 {
   "name": "ivona-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ivona Cloud (via Amazon services) client library for Node",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
