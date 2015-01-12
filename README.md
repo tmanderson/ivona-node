@@ -7,16 +7,6 @@ Node client library for [IVONA Speech Cloud API](http://www.ivona.com/us/). Yes,
 - CreateSpeech
 - ListVoices
 
-## Versioning
-
-SEMVER, each revision is tagged and the version is updated respectfully.
-
-```sh
-git clone https://github.com/tmanderson/ivona-node.git
-cd ivona-node
-npm install
-```
-
 ## Installation
 
 ```

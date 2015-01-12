@@ -16,7 +16,18 @@
   "author": "Mitch Anderson",
   "license": "MIT",
   "dependencies": {
-    "aws4": "^0.4.2",
-    "request": "^2.51.0"
-  }
+    "aws4": "^0.4.2"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmanderson/ivona-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tmanderson/ivona-node/issues"
+  },
+  "homepage": "https://github.com/tmanderson/ivona-node"
 }
