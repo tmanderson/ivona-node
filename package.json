@@ -1,0 +1,22 @@
+{
+  "name": "ivona-node",
+  "version": "0.1.0",
+  "description": "Ivona Cloud (via Amazon services) client library for Node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ivona",
+    "tts",
+    "ivonacloud",
+    "text-to-speech",
+    "text2speech"
+  ],
+  "author": "Mitch Anderson",
+  "license": "MIT",
+  "dependencies": {
+    "aws4": "^0.4.2",
+    "request": "^2.51.0"
+  }
+}

@@ -1,0 +1,55 @@
+# Node IVONA 
+
+Node client library for [IVONA Speech Cloud API](http://www.ivona.com/us/). Yes, this is up-to-date and uses the most recent AWS Signature 4 scheme (thanks to [aws4](https://github.com/mhart/aws4)). All you need is your Ivona access and secret (the one only given to you once upon creating it) keys.
+
+## Supported API Calls
+
+- CreateSpeech
+- ListVoices
+
+## Versioning
+
+SEMVER, each revision is tagged and the version is updated respectfully.
+
+```sh
+git clone https://github.com/tmanderson/ivona-node.git
+cd ivona-node
+npm install
+```
+
+## Installation
+
+```
+npm install ivona-node
+```
+
+## Documentation
+
+No current documentation, as the entire extent of the API can be viewed below.
+
+## Example usage
+
+```javascript
+    var ivona = new Ivona({
+        accessKey: 'IVONA_ACCESS_KEY',
+        secretKey: 'IVONA_SECRET_KEY'
+    });
+
+    ivona.listVoices()
+        .on('end', function(voices) {
+            console.log(voices);
+        });
+
+    //  ivona.createVoice(text, config)
+    //  [string] text - the text to be spoken
+    //  [object] config (optional) - override Ivona request via 'body' value
+    ivona.createVoice('This is the text that will be spoken.', {
+        body: {
+            voice: {
+                name: 'Salli',
+                language: 'en-US',
+                gender: 'Female'
+            }
+        }
+    });
+```
