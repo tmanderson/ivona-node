@@ -43,3 +43,19 @@ No current documentation, as the entire extent of the API can be viewed below.
         }
     }).pipe(fs.createWriteStream('text.mp3'));
 ```
+
+## With Proxy Support (via @kuzzmi)
+
+```javascript
+    var ivona = new Ivona({
+        accessKey: 'IVONA_ACCESS_KEY',
+        secretKey: 'IVONA_SECRET_KEY',
+        proxy: {
+            host: '0.0.0.0',
+            port: 12345
+        }
+    });
+```
+
+## Contributors
+- @kuzzmi
