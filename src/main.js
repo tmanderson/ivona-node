@@ -1,12 +1,14 @@
 'use strict';
 
-var fs = require('fs'),
-    http = require('http'),
-    https = require('https'),
-    aws4 = require('aws4'),
-    util = require('util'),
+var fs     = require('fs'),
+    http   = require('http'),
+    https  = require('https'),
+    aws4   = require('aws4'),
+    util   = require('util'),
+    Tls    = require('tls'),
     Stream = require('stream');
 
+// HttpsProxyAgent for handling proxying
 function HttpsProxyAgent(options) {
     https.Agent.call(this, options);
  
@@ -16,11 +18,11 @@ function HttpsProxyAgent(options) {
     this.createConnection = function (opts, callback) {
         // do a CONNECT request
         var req = http.request({
-            host: options.proxyHost,
-            port: options.proxyPort,
-            method: 'CONNECT',
-            path: opts.host + ':' + opts.port,
-            headers: {
+            host    : options.proxyHost,
+            port    : options.proxyPort,
+            method  : 'CONNECT',
+            path    : opts.host + ':' + opts.port,
+            headers : {
                 host: opts.host
             }
         });
@@ -68,8 +70,9 @@ HttpsProxyAgent.prototype.addRequest = function (req, host, port, localAddress) 
 HttpsProxyAgent.prototype.createSocket = function (name, host, port, localAddress, req, callback) {
     var self = this;
     var options = util._extend({}, self.options);
-    options.port = port;
-    options.host = host;
+
+    options.port         = port;
+    options.host         = host;
     options.localAddress = localAddress;
  
     options.servername = host;
@@ -131,12 +134,12 @@ HttpsProxyAgent.prototype.createSocket = function (name, host, port, localAddres
  */
 var voiceSettings = {
     input: {
-        data : null,
-        type : 'text/plain'
+        data           : null,
+        type           : 'text/plain'
     },
     outputFormat: {
-        codec      : 'MP3',
-        sampleRate : 22050
+        codec          : 'MP3',
+        sampleRate     : 22050
     },
     Parameters: {
         rate           : 'medium',
@@ -145,9 +148,9 @@ var voiceSettings = {
         paragraphBreak : 650
     },
     voice: {
-        name     : 'Salli',
-        language : 'en-US',
-        gender   : 'Female'
+        name           : 'Salli',
+        language       : 'en-US',
+        gender         : 'Female'
     }
 };
 
@@ -216,15 +219,17 @@ function caseProperties(source, deep, lower) {
  * An Ivona Cloud API request
  * @param {Object} request - a signed request returned from `aws4`
  */
-function IvonaRequest(request, keys) {
+function IvonaRequest(request, ivona) {
     if (request.buffer) this.buffer = true;
 
-    this.signedCredentials = aws4.sign(request, {
-        accessKeyId: keys.accessKey,
-        secretAccessKey: keys.secretKey
-    });
+    var keys = {
+        accessKeyId     : ivona.accessKey,
+        secretAccessKey : ivona.secretKey
+    };
 
-    this.proxy = request.proxy;
+    this.signedCredentials = aws4.sign(request, keys);
+
+    this.proxy = ivona.proxy;
 }
 
 IvonaRequest.prototype = {
@@ -246,8 +251,8 @@ IvonaRequest.prototype = {
 
         if (this.proxy !== undefined) {
             var agent = new HttpsProxyAgent({
-                proxyHost: this.proxy.host,
-                proxyPort: this.proxy.port
+                proxyHost : this.proxy.host,
+                proxyPort : this.proxy.port
             });
 
             requestParams.agent = agent;
@@ -291,12 +296,13 @@ IvonaRequest.prototype = {
  */
 function Ivona(config) {
     //  THESE ARE NOT REQUIRED (and for the foreseeable future shouldn't be overridden)
-    this.host = config.host || 'tts.eu-west-1.ivonacloud.com';
+    this.host    = config.host    || 'tts.eu-west-1.ivonacloud.com';
     this.service = config.service || 'tts';
-    this.method = config.method || 'POST';
-    this.region = config.region || 'eu-west-1';
-
-    this.proxy = config.proxy || undefined;
+    this.method  = config.method  || 'POST';
+    this.region  = config.region  || 'eu-west-1';
+    
+    // THAT IS OPTIONAL (if proxy should be defined)
+    this.proxy   = config.proxy   || undefined;
 
     //  THESE ARE REQUIRED
     this.accessKey = config.accessKey;
@@ -316,12 +322,12 @@ Ivona.prototype = {
     getRequest: function(path, config) {
         return {
             path    : path,
-            host    : config.host || this.host,
-            buffer  : config.buffer || false,
+            host    : config.host    || this.host,
+            buffer  : config.buffer  || false,
             service : config.service || this.service,
-            method  : config.method || this.method,
-            region  : config.region || this.region,
-            proxy   : config.proxy || this.proxy,
+            method  : config.method  || this.method,
+            region  : config.region  || this.region,
+            proxy   : config.proxy   || this.proxy,
             headers: {
                 'content-type': 'application/json'
             },
