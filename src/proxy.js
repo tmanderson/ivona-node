@@ -11,7 +11,7 @@ function HttpsProxyAgent(options) {
  
     this.createConnection = function (opts, callback) {
         // do a CONNECT request
-        var req = http.request({
+        var req = https.request({
             host    : options.proxyHost,
             port    : options.proxyPort,
             method  : 'CONNECT',
