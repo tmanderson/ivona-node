@@ -1,6 +1,6 @@
 {
   "name": "ivona-node",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Ivona Cloud (via Amazon services) client library for Node",
   "main": "src/main.js",
   "scripts": {
