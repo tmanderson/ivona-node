@@ -26,7 +26,7 @@ No current documentation, as the entire extent of the API can be viewed below.
     });
 
     ivona.listVoices()
-        .on('end', function(voices) {
+        .on('complete', function(voices) {
             console.log(voices);
         });
 
