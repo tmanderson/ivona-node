@@ -16,15 +16,15 @@ function HttpsProxyAgent(options) {
             host    : options.proxyHost,
             port    : options.proxyPort,
             method  : 'CONNECT',
-            path    : opts.host + ':' + opts.port,
+            path    : opts.host.host + ':' + opts.host.port,
             headers : {
-                host: opts.host
+                host: opts.host.host
             }
         });
  
         req.on('connect', function (res, socket, head) {
             var cts = Tls.connect({
-                host: opts.host,
+                host: opts.host.host,
                 socket: socket
             }, function () {
                 callback(false, cts);
