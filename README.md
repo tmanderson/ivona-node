@@ -6,6 +6,10 @@ Node client library for [IVONA Speech Cloud API](http://www.ivona.com/us/). Yes,
 
 - CreateSpeech
 - ListVoices
+- PutLexicon
+- GetLexicon
+- DeleteLexicon
+- ListLexicons
 
 ## Installation
 
@@ -44,6 +48,48 @@ No current documentation, as the entire extent of the API can be viewed below.
     }).pipe(fs.createWriteStream('text.mp3'));
 ```
 
+## Lexicons (via @UnaliWear)
+
+```javascript
+    var ivona = new Ivona({
+        accessKey: 'IVONA_ACCESS_KEY',
+        secretKey: 'IVONA_SECRET_KEY'
+    });
+
+    //  ivona.putLexicon(name, content)
+    //  [string] name - the name of this lexicon
+    //  [string] content - PLS xml
+    //  [object] config (optional) - override Ivona request via 'body' value
+    ivona.putLexicon('newLexicon', '<?xml ... ?><lexicon>...</lexicon>')
+        .on('complete', function(lexicons) {
+            console.log(lexicons);
+        });
+
+    //  ivona.getLexicon(name)
+    //  [string] name - the name of this lexicon
+    //  [object] config (optional) - override Ivona request via 'body' value
+    ivona.getLexicon('newLexicon')
+        .on('complete', function(pls) {
+            console.log(pls);
+        });
+
+    //  ivona.deleteLexicon(name)
+    //  [string] name - the name of this lexicon
+    //  [object] config (optional) - override Ivona request via 'body' value
+    ivona.deleteLexicon('newLexicon')
+        .on('complete', function() {
+            console.log('Done');
+        });
+
+    //  ivona.listLexicons()
+    //  [object] config (optional) - override Ivona request via 'body' value
+    ivona.listLexicons()
+        .on('complete', function(lexicons) {
+            console.log(lexicons);
+        });
+
+```
+
 ## With Proxy Support (via @kuzzmi)
 
 ```javascript
@@ -59,3 +105,4 @@ No current documentation, as the entire extent of the API can be viewed below.
 
 ## Contributors
 - @kuzzmi
+- @UnaliWear
