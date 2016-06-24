@@ -48,7 +48,8 @@ No current documentation, as the entire extent of the API can be viewed below.
     }).pipe(fs.createWriteStream('text.mp3'));
 ```
 
-## Lexicons
+## Lexicons (via @UnaliWear)
+
 ```javascript
     var ivona = new Ivona({
         accessKey: 'IVONA_ACCESS_KEY',
@@ -104,3 +105,4 @@ No current documentation, as the entire extent of the API can be viewed below.
 
 ## Contributors
 - @kuzzmi
+- @UnaliWear
