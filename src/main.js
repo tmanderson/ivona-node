@@ -36,6 +36,16 @@ var voiceSettings = {
 
 var voiceListSettings = {};
 
+var putLexiconSettings = {
+    lexicon: {}
+};
+
+var getLexiconSettings = {};
+
+var deleteLexiconSettings = {};
+
+var listLexiconSettings = {};
+
 /**
  * Grab values of property `prop` from object `source`
  * @param  {Object} source - The object with property `prop`
@@ -91,7 +101,7 @@ function caseProperties(source, deep, lower) {
     var method = lower ? 'toLowerCase' : 'toUpperCase';
 
     for (i in source) {
-        if (typeof source[i] !== 'object') {
+        if (typeof source[i] !== 'object' || Array.isArray(source[i])) {
             output[i.charAt(0)[method]() + i.substr(1)] = source[i];
         } else {
             output[i.charAt(0)[method]() + i.substr(1)] = caseProperties(source[i], deep, lower);
@@ -153,7 +163,7 @@ IvonaRequest.prototype = {
 
             res.on('end', function() {
                 if (buffer) {
-                    if (/json/i.test(res.headers['content-type'])) {
+                    if (/json/i.test(res.headers['content-type']) && data.length > 0) {
                         req.emit('complete', caseProperties(JSON.parse(data), true, true));
                     } else {
                         req.emit('complete', data);
@@ -186,7 +196,7 @@ function Ivona(config) {
     this.service = config.service || 'tts';
     this.method  = config.method  || 'POST';
     this.region  = config.region  || 'eu-west-1';
-    
+
     // THAT IS OPTIONAL (if proxy should be defined)
     this.proxy   = config.proxy   || undefined;
 
@@ -268,6 +278,119 @@ Ivona.prototype = {
         this.request = new IvonaRequest(
             this.getRequest('/ListVoices', config || {}),
             this
+        );
+
+        return this.request.exec();
+    },
+
+    /**
+     * Interface to the Ivona Cloud `PutLexicon` endpoint
+     * @param  {String} name      Name of this lexicon
+     * @param  {String} contents  PLS contents
+     * @param  {Object} config    Configuration overrides
+     * @return {IvonaRequest}     The `https.request` returned from an `IvonaRequest`
+     */
+    putLexicon: function(name, contents, config) {
+        if (!config) config = {};
+
+        if (config.body) {
+            config.body = merge(Object.create(putLexiconSettings), config.body);
+        } else {
+            config.body = Object.create(putLexiconSettings);
+        }
+
+        config.body.lexicon.name = name;
+        config.body.lexicon.contents = contents;
+
+        //  must be string for aws4
+        config.body = JSON.stringify(caseProperties(config.body, true));
+
+        this.request = new IvonaRequest(
+          this.getRequest('/PutLexicon', config),
+          this
+        );
+
+        return this.request.exec();
+    },
+
+
+    /**
+     * Interface to the Ivona Cloud `GetLexicons` endpoint
+     * @param  {Object} name      Name of lexicon to retrieve
+     * @param  {Object} config    Configuration overrides
+     * @return {IvonaRequest}     The `https.request` returned from an `IvonaRequest`
+     */
+    getLexicon: function(name, config) {
+        if (!config) config = {};
+
+        if (config.body) {
+            config.body = merge(Object.create(getLexiconSettings), config.body);
+        } else {
+            config.body = Object.create(getLexiconSettings);
+        }
+
+        config.body.name = name;
+        //  must be string for aws4
+        config.body = JSON.stringify(caseProperties(config.body, true));
+        config.buffer = true;
+
+        this.request = new IvonaRequest(
+          this.getRequest('/GetLexicon', config || {}),
+          this
+        );
+
+        return this.request.exec();
+    },
+
+    /**
+     * Interface to the Ivona Cloud `DeleteLexicon` endpoint
+     * @param  {Object} name      Name of lexicon to retrieve
+     * @param  {Object} config    Configuration overrides
+     * @return {IvonaRequest}     The `https.request` returned from an `IvonaRequest`
+     */
+    deleteLexicon: function(name, config) {
+        if (!config) config = {};
+
+        if (config.body) {
+            config.body = merge(Object.create(deleteLexiconSettings), config.body);
+        } else {
+            config.body = Object.create(deleteLexiconSettings);
+        }
+
+        config.body.name = name;
+        //  must be string for aws4
+        config.body = JSON.stringify(caseProperties(config.body, true));
+        config.buffer = true;
+
+        this.request = new IvonaRequest(
+          this.getRequest('/DeleteLexicon', config || {}),
+          this
+        );
+
+        return this.request.exec();
+    },
+
+    /**
+     * Interface to the Ivona Cloud `ListLexicons` endpoint
+     * @param  {Object} config    Configuration overrides
+     * @return {IvonaRequest}     The `https.request` returned from an `IvonaRequest`
+     */
+    listLexicons: function(config) {
+        if (!config) config = {};
+
+        if (config.body) {
+            config.body = merge(Object.create(listLexiconSettings), config.body);
+        } else {
+            config.body = Object.create(listLexiconSettings);
+        }
+
+        //  must be string for aws4
+        config.body = JSON.stringify(caseProperties(config, true));
+        config.buffer = true;
+
+        this.request = new IvonaRequest(
+          this.getRequest('/ListLexicons', config || {}),
+          this
         );
 
         return this.request.exec();
