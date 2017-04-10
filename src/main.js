@@ -170,7 +170,7 @@ IvonaRequest.prototype = {
                     }
                 }
                 data = null;
-                req.emit('end');
+                req.emit('end', res);
             });
 
             res.on('error', function(err) {
