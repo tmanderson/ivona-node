@@ -1,3 +1,5 @@
+### DEPRECATION WARNING: Amazon Polly will replace the IVONA Speech Cloud Beta service, which will be deprecated on June 30th, 2017.  
+
 # Node IVONA
 
 Node client library for [IVONA Speech Cloud API](http://developer.ivona.com/en/speechcloud). Yes, this is up-to-date and uses the most recent AWS Signature 4 scheme (thanks to [aws4](https://github.com/mhart/aws4)). All you need is your Ivona access and secret (the one only given to you once upon creating it) keys.
